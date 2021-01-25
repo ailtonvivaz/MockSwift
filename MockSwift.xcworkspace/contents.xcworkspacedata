@@ -2,10 +2,10 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:MockSwiftExample/MockSwiftExample.xcodeproj">
+      location = "group:MockSwiftPlayground.playground">
    </FileRef>
    <FileRef
-      location = "group:MockSwiftPlayground/MockSwiftPlayground.xcodeproj">
+      location = "group:MockSwiftExample/MockSwiftExample.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:MockSwift.xcodeproj">
