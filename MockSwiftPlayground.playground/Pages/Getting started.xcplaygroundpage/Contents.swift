@@ -11,7 +11,7 @@ import XCTest
 
 /*:
  ## Create Mock
- Typically, we start with a protocol *Service*.
+ Typically, we start with a protocol *Service* and un function *myFunction* that use *Service*.
  */
 protocol Service {
     func makeInt(seed: Int) -> Int
@@ -22,14 +22,17 @@ func myFunction(_ service: Service) -> Int {
     service.makeInt(seed: 1)
 }
 
-//: Now, to be able to create a *Service* mock, you need to extend *Mock* like bellow.
+/*:
+ To fully test *myFunction* we need to mock *Service*.
+ To be able to create a *Service* mock, you need to extend *Mock* like bellow.
+ */
 extension Mock: Service where WrappedType == Service {
     func makeInt(seed: Int) -> Int {
         mocked(seed)
     }
 }
-
 //: This extension allows you to use the propertyWrapper *@Mock* on a property of type *Service*.
+
 class MyTests: XCTestCase {
     @Mock var mockedService: Service
 }
@@ -84,7 +87,7 @@ extension MyTests {
  */
 
 /*:
- ## One more thing
+ ## Code Generation
  Writing extensions can be painfull. To make it easier *MockSwift* has a *Sourcery* template to automaticaly generate extensions for you.
  See [Sourcery](@Sourcery)
  */
