@@ -7,8 +7,8 @@ import XCTest
 //: # Mock
 
 /*:
- To use the power of **MockSwift**, you have to extend **Mock** with your protocol type.
- After that you will be able to use the property wrapper **@Mock** on this type and change its behaviour for your tests.
+ To use the power of **MockSwift**, you have to extend **Mock** with your protocol type. \
+ After that you will be able to use the property wrapper **@Mock** on this type and change its behaviour for your tests. \
  They are 3 kinds of behaviours you are susceptible to interact with: functions, properties and subscripts.
  */
 
@@ -36,8 +36,8 @@ extension Mock: ServiceMethods where WrappedType == ServiceMethods {
 }
 /*:
  >Parameters **@nonescaping** are not supported.  \
-It's important to keep the same order for parameters when you call call **mocked()**.  \
-Use **mockedThrowable** instead of **mocked** for a methods that can throw.
+ It's important to keep the same order for parameters when you call **mocked()**.  \
+ Use **mockedThrowable** instead of **mocked** for a methods that can throw.
  */
 
 //: ## Properties
@@ -101,12 +101,48 @@ class MyTests: XCTestCase {
 }
 
 //: ### Stubs
+/*:
+ A stub is a default value to return for a type when no behavior is define with **Given**. \
+ There is 2 kinds of stubs, Global and Local.
+ */
 
 //: #### Global Stubs
+/*:
+ A global stub is a stub that will be applied for all of your tests. \
+ To create a Glocal Stub you have to extend the type with GlobalStub protocol.
+ */
+
+struct MyObject {
+    let name: String
+}
+
+extension MyObject: GlobalStub {
+    static func stub() -> MyObject {
+        MyObject(name: "globalStub")
+    }
+}
 
 //: #### Local Stubs
+/*:
+ A local stub is a stub that will be applied for a Mock. \
+ To create a local stub you have to define its into the @Mock notation.
+ */
 
-//: ### Strategy
+class MyTestsWithStub: XCTestCase {
+    @Mock(stubs: [
+        Stub(MyObject.self, MyObject(name: "localStub1"))
+    ])
+    var mockedServiceMethods: ServiceMethods
 
+    @Mock(stubs: [
+        MyObject.self => MyObject(name: "localStub2")
+    ])
+    var mockedServiceMethods2: ServiceMethods
+}
+
+/*:
+ > The operator *=>* is equivalent to *Stub.init* \
+ When you define a Local Stub and a Global Stub for the same type, the Mock will always returns the Local Stub unless you change the **strategy**. To go further see [Strategy](@Strategy)
+ */
 
 //: [Next](@next)

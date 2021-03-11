@@ -17,7 +17,6 @@ protocol Service {
     func makeInt(seed: Int) -> Int
 }
 
-//: To fully test *myFunction* you need to mock *Service*.
 func myFunction(_ service: Service) -> Int {
     service.makeInt(seed: 1)
 }
@@ -46,7 +45,7 @@ extension MyTests {
 }
 /*:
  > The returned value is *0* because *GlobalStub* value for an *Int* is *0*.
- > To go further see [Strategies](@strategies)
+ > To go further see [Mock](@Mock)
  */
 
 //: ## Define behaviors
