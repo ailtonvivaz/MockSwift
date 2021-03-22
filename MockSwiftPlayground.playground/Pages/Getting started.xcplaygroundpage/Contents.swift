@@ -51,26 +51,26 @@ extension MyTests {
 //: ## Define behaviors
 //: Firstly, to be able to define behaviors dynamicly for *Service* into your test, extend *Given* like bellow.
 extension Given where WrappedType == Service {
-    func makeInt(seed: Predicate<Int>) -> Mockable<Int> {
+    func makeInt(seed: Int) -> Mockable<Int> {
         mockable(seed)
     }
 }
 
 extension MyTests {
     func test_myFunction_givenBehavior() {
-        given(mockedService).makeInt(seed: >0).willReturn(1)
+        given(mockedService).makeInt(seed: 1).willReturn(1)
         let value = myFunction(mockedService)
         XCTAssertEqual(value, 1)
     }
 }
 /*:
- > To read more details about how to use *Given* see [Given](@given)
+ > To read more details about how to use *Given* see [Given](@Given)
  */
 
 //: ## Verify calls
 //: Firstly, to be able to verify calls on *Service* into your test, extend *Then* like bellow.
 extension Then where WrappedType == Service {
-    func makeInt(seed: Predicate<Int>) -> Verifiable<Int> {
+    func makeInt(seed: Int) -> Verifiable<Int> {
         verifiable(seed)
     }
 }
@@ -78,11 +78,11 @@ extension Then where WrappedType == Service {
 extension MyTests {
     func test_myFunction_verifyCall() {
         _ = myFunction(mockedService)
-        then(mockedService).makeInt(seed: ==1).calledOnce()
+        then(mockedService).makeInt(seed: 1).calledOnce()
     }
 }
 /*:
- > To read more details about how to use *Then* see [Then](@then)
+ > To read more details about how to use *Then* see [Then](@Then)
  */
 
 /*:

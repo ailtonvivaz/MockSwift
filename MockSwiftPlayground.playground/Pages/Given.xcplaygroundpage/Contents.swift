@@ -4,70 +4,73 @@ import Foundation
 import MockSwift
 import XCTest
 
-//: Given
+//: # Given
+/*:
+ **MockSwift** allow you to inject behaviours to your protocol type. \
+ To be able to do that, you have to extend **Given**.
+ They are 3 kinds of behaviours you are susceptible to inject: functions, properties and subscripts.
+ */
 
-protocol Service {
-    func myFunction(arg1: Int, arg2: String) throws -> Int
+//: ## Methods
+protocol ServiceMethods {
+    func nothing()
+    func function(arg: Int, arg2: Bool, _ completion: @escaping (String) -> Void) -> String
+    func throwing(value: Int) throws
 }
 
+extension Given where WrappedType == ServiceMethods {
 
-extension Mock: Service where WrappedType == Service {
-    func myFunction(arg1: Int, arg2: String) throws -> Int {
-        try mockedThrowable(arg1, arg2)
+    func nothing() -> Mockable<Void> {
+        mockable()
     }
+
+    func function(arg: Int, arg2: Bool, _ completion: @escaping (String) -> Void) -> Mockable<String> {
+        mockable(arg, arg2, completion)
+    }
+
+    func throwing(value: Int) -> Mockable<Void> {
+        mockable(value)
+    }
+
+    // Use Predicate to define complexe triggers. To go further see [Predicate](@Predicate)
+    func throwing(value: Predicate<Int>) -> Mockable<Void> {
+        mockable(value)
+    }
+}
+/*:
+ >Parameters **@nonescaping** are not supported.  \
+ The function where you call `mockable()` must respect the following rules:  \
+    - The name must match the function from the `WrappedType`. Example: **function(arg:arg2:)**  \
+    - The return type must be a `Mockable` with, as generic type, the same type  \
+    as the return type of the method in the `WrappedType`. Example: `String` became `Mockable<String>`.  \
+    - Call `mockable()` with all parameters in the same order.
+ */
+
+//: To see how to create mocks go to [Mock](@Mock)
+extension Mock: ServiceMethods where WrappedType == ServiceMethods {
+
+    func nothing() {
+        mocked()
+    }
+
+    func function(arg: Int, arg2: Bool, _ completion: @escaping (String) -> Void) -> String {
+        mocked(arg, arg2, completion)
+    }
+
+    func throwing(value: Int) throws {
+        try mockedThrowable(value)
+    }
+
 }
 
 class MyTests: XCTestCase {
-    @Mock var mockedService: Service
-}
+    @Mock var mockedService: ServiceMethods
 
-extension Given where WrappedType == Service {
-    func myFunction(arg1: Int, arg2: String) -> Mockable<Int> {
-        mockable(arg1, arg2)
-    }
-
-    func myFunction(arg1: Predicate<Int>, arg2: Predicate<String>) -> Mockable<Int> {
-        mockable(arg1, arg2)
-    }
-}
-
-extension MyTests {
     func test_myFunction() {
-        // with values
-        given(mockedService).myFunction(arg1: 1, arg2: "hello")
-            .willReturn(1)
-        try? mockedService.myFunction(arg1: 1, arg2: "hello")
-
-        // with predicates
-        given(mockedService).myFunction(arg1: ==2, arg2: =="bye")
-            .willReturn(2)
-        try? mockedService.myFunction(arg1: 2, arg2: "bye")
+        given(mockedService).throwing(
     }
 }
 
-extension MyTests {
-    func test_myFunction2() {
-        /*given(mockedService).myFunction(arg1: 1, arg2: "hello")
-            .will { arguments -> Bool in
-                arguments[0]
-                arguments[1]
-                return true
-            }
-
-        given(mockedService).myFunction(arg1: 2, arg2: "hello")
-            .willReturn(true, false, true, true)*/
-let err = NSError(domain: "", code: 0)
-        given(mockedService).myFunction(arg1: .any(), arg2: .any())
-            .willThrow(err)
-
-        do {
-             _ = try mockedService.myFunction(arg1: 3, arg2: "bye")
-        } catch {
-            error
-        }
-
-    }
-}
 
 MyTests.defaultTestSuite.run()
 //: [Next](@next)

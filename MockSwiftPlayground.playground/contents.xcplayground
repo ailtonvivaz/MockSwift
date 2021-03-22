@@ -4,7 +4,8 @@
         <page name='Getting started'/>
         <page name='Mock'/>
         <page name='Given'/>
-        <page name='Untitled Page'/>
+        <page name='Write Mocks'/>
         <page name='Then'/>
+        <page name='Strategy'/>
     </pages>
 </playground>

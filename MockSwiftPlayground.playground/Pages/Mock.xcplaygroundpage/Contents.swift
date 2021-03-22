@@ -8,7 +8,7 @@ import XCTest
 
 /*:
  To use the power of **MockSwift**, you have to extend **Mock** with your protocol type. \
- After that you will be able to use the property wrapper **@Mock** on this type and change its behaviour for your tests. \
+ After that you will be able to use the property wrapper **@Mock** on this type to create a mocked instance on your tests. \
  They are 3 kinds of behaviours you are susceptible to interact with: functions, properties and subscripts.
  */
 
